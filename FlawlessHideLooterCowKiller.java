@@ -44,13 +44,18 @@ public class FlawlessHideLooterCowKiller extends Script implements Painting {
 	private int beef_collected = 0;
 	private static final long startTime = System.currentTimeMillis();
     Font font = new Font("Verdana", Font.BOLD, 14);
+    private State state;
 
 	private Clicking clicking = new Clicking();
 	private Transportation transport = new Transportation();
 	private Battle cmb = new Battle();
 	private Banker banker = new Banker();
+	private RSArea middle_pasture_area = transport.getAreaFromCoords(3197, 3208, 3284, 3299, 0);
+	private RSArea north_pasture_area = transport.getAreaFromCoords(3171, 3186, 3320, 3331, 0);
 	private RSArea bank_area = transport.getAreaFromCoords(3207, 3209, 3216, 3219, 2);
-	private RSArea pasture_area = transport.getAreaFromCoords(3248, 3262, 3280, 3294, 0);
+	private RSArea east_pasture_area = transport.getAreaFromCoords(3248, 3262, 3280, 3294, 0);
+	private RSArea pasture_area;
+	private RSTile pasture_gate;
 	private boolean execute;
 	
     public void run() { 
@@ -68,14 +73,14 @@ public class FlawlessHideLooterCowKiller extends Script implements Painting {
     	
         while(execute) {
         	
-            State state = state();
+            state = state();
             println("State");
             println(state);
             if (state != null) {
                 switch (state) {
                     case WALK_TO_LOOTZ:
                     	// walk to area
-                    	if (transport.webWalking(new RSTile(3250, 3263, 0))) {
+                    	if (transport.webWalking(pasture_gate)) {
                     		transport.dpathnavWalk(pasture_area.getRandomTile());
                 		}
                         break;
@@ -176,7 +181,7 @@ public class FlawlessHideLooterCowKiller extends Script implements Painting {
 	    		// find loots
 	    		if (items.length > 0) {
 	    			// ensure item is at least within range
-	    			if (items[0].getPosition().distanceToDouble(Player.getPosition()) < 10) {
+	    			if (items[0].getPosition().distanceToDouble(Player.getPosition()) < 10 && transport.validateWalk(items[0].getPosition(), false)) {
 	    				
 		    			if (items[0].getPosition().distanceToDouble(Player.getPosition()) > 5) {
 		    				if (!items[0].isOnScreen()) {
@@ -193,7 +198,7 @@ public class FlawlessHideLooterCowKiller extends Script implements Painting {
     		RSNPC[] npc = NPCs.findNearest("Cow", "Calf");
     		// check for combat
     		if (NPCs.findNearest("Cow", "Calf").length > 0 && kill){
-    			if (npc[0].getPosition().distanceToDouble(Player.getPosition()) < 8) {
+    			if (npc[0].getPosition().distanceToDouble(Player.getPosition()) < 8 && transport.validateWalk(npc[0].getPosition(), false)) {
     				return State.KILL;
     			}
     		}
@@ -230,6 +235,27 @@ public class FlawlessHideLooterCowKiller extends Script implements Painting {
 	   bank_beef = ui.getBankBeef();
 	   bank_bones = ui.getBankBones();
 	   kill = ui.getKillCows();
+	   
+	   pasture_area = getLocation();
+   }
+   
+   private RSArea getLocation() {
+	   if (ui.getLocationNorth()) {
+		   pasture_gate = new RSTile(3177, 3314, 0);
+		   return north_pasture_area;
+	   }
+	   
+	   if (ui.getLocationMiddle()) {
+		   pasture_gate = new RSTile(3198, 3281, 0);
+		   return middle_pasture_area;
+	   }
+	   
+	   if (ui.getLocationEast()) {
+		   pasture_gate = new RSTile(3250, 3263, 0);
+		   return east_pasture_area;
+	   }
+	   
+	   return pasture_area;
    }
    
    public void onPaint(Graphics g) {
@@ -240,6 +266,8 @@ public class FlawlessHideLooterCowKiller extends Script implements Painting {
        g.setColor(new Color(0, 0, 0));
 
        g.drawString("Run Time: " + Timing.msToString(run_time), 140, 360);
+       g.drawString("Script State: " + state, 280, 360);
+
 
        g.drawString("Items - ", 140, 380);
 
