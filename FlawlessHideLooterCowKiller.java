@@ -8,6 +8,7 @@ import org.tribot.api2007.Skills;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSNPC;
+import org.tribot.api2007.types.RSTile;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -74,8 +75,8 @@ public class FlawlessHideLooterCowKiller extends Script implements Painting {
                 switch (state) {
                     case WALK_TO_LOOTZ:
                     	// walk to area
-                    	if (!transport.dpathnavWalk(pasture_area.getRandomTile())) {
-                    		transport.webWalking(pasture_area.getRandomTile());
+                    	if (transport.webWalking(new RSTile(3250, 3263, 0))) {
+                    		transport.dpathnavWalk(pasture_area.getRandomTile());
                 		}
                         break;
                     case WALK_TO_BANK:
