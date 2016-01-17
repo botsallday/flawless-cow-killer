@@ -1,4 +1,4 @@
-package scripts;
+package scripts.BADFlawlessCowKiller.api.battle;
 
 import org.tribot.api.General;
 import org.tribot.api.Timing;
@@ -7,12 +7,14 @@ import org.tribot.api2007.Combat;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.types.RSNPC;
 
-public class Battle {
+import scripts.BADFlawlessCowKiller.api.transportation.BADTransportation;
+
+public class BADBattle {
 	
-	private Transportation transport;
+	private BADTransportation transport;
 	
-	Battle() {
-		transport = new Transportation();
+	public BADBattle() {
+		transport = new BADTransportation();
 	}
 	
 	

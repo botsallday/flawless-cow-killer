@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package scripts;
+package scripts.BADFlawlessCowKiller.framework.gui;
 
 @SuppressWarnings("serial")
 public class HideGUI extends javax.swing.JFrame {
@@ -32,7 +32,7 @@ public class HideGUI extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
-        javax.swing.JTextField food_name = new javax.swing.JTextField();
+        food_name = new javax.swing.JTextField();
         kill_cows = new javax.swing.JCheckBox();
         jSeparator3 = new javax.swing.JSeparator();
         use_food = new javax.swing.JCheckBox();
@@ -294,6 +294,14 @@ public class HideGUI extends javax.swing.JFrame {
     public boolean getLocationEast() {
     	return location_east.isSelected();
     }
+    
+    public String getFoodName() {
+    	if (food_name.getText() != null) {
+    		return food_name.getText();
+    	}
+    	
+    	return "None";
+    }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
@@ -330,6 +338,7 @@ public class HideGUI extends javax.swing.JFrame {
     private javax.swing.JRadioButton location_middle;
     private javax.swing.JRadioButton location_north;
     private javax.swing.JCheckBox use_food;
+    private javax.swing.JTextField food_name;
     // End of variables declaration                   
 
 }
