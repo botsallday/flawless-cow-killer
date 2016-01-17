@@ -23,6 +23,6 @@ public class BADAreas {
 	public static final RSArea AUBURY_RUNE_SHOP_AREA = new RSArea(new RSTile(3252, 3401, 0), new RSTile(3254, 3402, 0));
 	public static final RSArea MIDDLE_PASTURE_AREA = new RSArea(new RSTile(3197, 3284, 0), new RSTile(3208, 3299, 0));
 	public static final RSArea NORTH_PASTURE_AREA = new RSArea(new RSTile(3171, 3320, 0), new RSTile(3186, 3331, 0));
-	public static final RSArea LUMBRIDGE_CASTLE_BANK_AREA = new RSArea(new RSTile(3207, 3209, 2), new RSTile(3216, 3219, 2));
-	public static final RSArea EAST_PASTURE_AREA = new RSArea(new RSTile(3248, 3262,0), new RSTile(3280, 3294, 0));
+	public static final RSArea LUMBRIDGE_CASTLE_BANK_AREA = new RSArea(new RSTile(3208, 3217, 2), new RSTile(3209, 3220, 2));
+	public static final RSArea EAST_PASTURE_AREA = new RSArea(new RSTile(3248, 3280,0), new RSTile(3262, 3294, 0));
 }

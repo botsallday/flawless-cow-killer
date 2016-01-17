@@ -61,44 +61,47 @@ public class FlawlessCowKillerCore extends Script {
     	AB.setHoverSkill(Skills.SKILLS.HITPOINTS);
     	
         while(execute) {
-            switch (state()) {
-            	case WITHDRAW_FOOD:
-            		withdrawFood();
-            		break;
-                case WALK_TO_LOOTZ:
-                	// walk to area
-                	walkToLootz();
-                    break;
-                case WALK_TO_BANK:
-                	if (!TRANSPORT.dpathnavWalk(BADAreas.LUMBRIDGE_CASTLE_BANK_AREA.getRandomTile())) {
-                		TRANSPORT.webWalking(BADAreas.LUMBRIDGE_CASTLE_BANK_AREA.getRandomTile());
-                	}
-                	break;
-                case GET_THE_LOOTZ:
-                	pickupLoot();
-                	break;
-                case DEPOSIT_ITEMS:
-                	// deposit items
-                	BANKER.depositAll();
-                    break;
-                case WALKING:
-                	// call antiban
-                	AB.handleWait();
-                	break;
-                case KILL:
-                	if (!CMB.searchForTarget("Cow", true)) {
-                		CMB.searchForTarget("Calf", true);
-                	};
-                	break;
-                case COMBAT:
-                	if (use_food) {
-                		eat();
-                	}
-                	AB.handleWait();
-                	break;
-                case SOMETHING_WENT_WRONG:
-                	execute = false;
-                	break;
+        	State state = state();
+        	if (state != null) {
+	            switch (state) {
+	            	case WITHDRAW_FOOD:
+	            		withdrawFood();
+	            		break;
+	                case WALK_TO_LOOTZ:
+	                	// walk to area
+	                	walkToLootz();
+	                    break;
+	                case WALK_TO_BANK:
+	                	if (!TRANSPORT.dpathnavWalk(BADAreas.LUMBRIDGE_CASTLE_BANK_AREA.getRandomTile())) {
+	                		TRANSPORT.webWalking(BADAreas.LUMBRIDGE_CASTLE_BANK_AREA.getRandomTile());
+	                	}
+	                	break;
+	                case GET_THE_LOOTZ:
+	                	pickupLoot();
+	                	break;
+	                case DEPOSIT_ITEMS:
+	                	// deposit items
+	                	BANKER.depositAll();
+	                    break;
+	                case WALKING:
+	                	// call antiban
+	                	AB.handleWait();
+	                	break;
+	                case KILL:
+	                	if (!CMB.searchForTarget("Cow", true)) {
+	                		CMB.searchForTarget("Calf", true);
+	                	};
+	                	break;
+	                case COMBAT:
+	                	if (use_food) {
+	                		eat();
+	                	}
+	                	AB.handleWait();
+	                	break;
+	                case SOMETHING_WENT_WRONG:
+	                	execute = false;
+	                	break;
+	            }
             }
             // control cpu usage
             General.sleep(100,  250);
@@ -189,6 +192,7 @@ public class FlawlessCowKillerCore extends Script {
         SOMETHING_WENT_WRONG,
         WITHDRAW_FOOD,
         WALKING,
+        WAITING
     }
    
    private void pickupLoot() {
@@ -231,7 +235,7 @@ public class FlawlessCowKillerCore extends Script {
 				Timing.waitCondition(BADConditions.noClosedGatesNear(), 3000);
 			}
 		}
-		TRANSPORT.nav().traverse(PASTURE_AREA.getRandomTile());
+		TRANSPORT.dpathnavWalk(PASTURE_AREA.getRandomTile());
 	}
    }
    
@@ -272,8 +276,6 @@ public class FlawlessCowKillerCore extends Script {
 	}
 	
 	public boolean eatFood() {
-		println("Eating food");
-	    sleep(5000);
 		if (Inventory.find(food).length > 0) {
 			if (Inventory.find(food)[0].hover()) {
 				if (Inventory.find(food)[0].click("Eat")) {
@@ -306,8 +308,6 @@ public class FlawlessCowKillerCore extends Script {
    
    private void withdrawFood() {
 		if (Banking.openBank()){
-			println(Inventory.getAll().length);
-			General.sleep(4000);
 			if (BANKER.depositAll() > 0 || Inventory.getAll().length == 0) {
 				if (BANKER.withdraw(food, 14)) {
 					
@@ -330,9 +330,5 @@ public class FlawlessCowKillerCore extends Script {
    
    public long getBeef() {
 	   return beef_collected;
-   }
-   
-   public String getState() {
-	   return state().toString();
    }
 }

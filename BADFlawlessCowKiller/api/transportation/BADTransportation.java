@@ -99,14 +99,17 @@ public class BADTransportation {
     
     public boolean webWalkToObject(String object_name) {
         final RSObject[] obj = Objects.findNearest(30, object_name);
+        if (obj.length > 0) {
+        	
+	        if (obj.length > 1 && anti_ban.abc.BOOL_TRACKER.USE_CLOSEST.next()) {
+	            if (obj[1].getPosition().distanceToDouble(Player.getPosition()) <= (obj[0].getPosition().distanceTo(Player.getPosition()) + 5) && validateWalk(obj[1].getPosition(), true)) {
+	                anti_ban.abc.BOOL_TRACKER.USE_CLOSEST.reset();
+	                return WebWalking.walkTo(obj[1].getPosition());
+	            }
+	        } else if (obj.length > 0 && validateWalk(obj[0].getPosition(), true)) {
+	            return WebWalking.walkTo(obj[0].getPosition());
+	        }
         
-        if (obj.length > 1 && anti_ban.abc.BOOL_TRACKER.USE_CLOSEST.next()) {
-            if (obj[1].getPosition().distanceToDouble(Player.getPosition()) <= (obj[0].getPosition().distanceTo(Player.getPosition()) + 5) && validateWalk(obj[1].getPosition(), true)) {
-                anti_ban.abc.BOOL_TRACKER.USE_CLOSEST.reset();
-                return WebWalking.walkTo(obj[1].getPosition());
-            }
-        } else if (obj.length > 0 && validateWalk(obj[0].getPosition(), true)) {
-            return WebWalking.walkTo(obj[0].getPosition());
         }
         
         return false;

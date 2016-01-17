@@ -24,7 +24,7 @@ public class FlawlessCowKiller extends Script implements Painting, Starting {
     }
    
     public void onPaint(Graphics g) {
-    	painter.paint(g, core.getHides(), core.getBones(), core.getBeef(), core.getState());
+    	painter.paint(g, core.getHides(), core.getBones(), core.getBeef());
     }
 
 	@Override
