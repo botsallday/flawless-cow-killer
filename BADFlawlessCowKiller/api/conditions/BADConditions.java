@@ -14,6 +14,7 @@ import org.tribot.api2007.Skills;
 import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSNPC;
+import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.BADFlawlessCowKiller.api.interfaces.BADInterfaces;
@@ -30,6 +31,21 @@ public class BADConditions {
 	public static final Condition WAIT_IDLE = isIdle();
 	public static final Condition ON_GROUND_FLOOR = onGroundFloor();
 	public static final Condition ON_FIRST_FLOOR = onFirstFloor();
+	
+	public static Condition noClosedGatesNear() {
+		return new Condition() {
+			@Override
+			public boolean active() {
+				General.sleep(100);
+				RSObject[] gates = Objects.find(5, Filters.Objects.nameContains("ate").combine(Filters.Objects.actionsContains("Open"), false));
+				if (gates.length > 0) {
+					return false;
+				}
+				
+				return true;
+			}
+		};
+	}
 	
 	public static Condition gainedItem(int count) {
     	return new Condition() {

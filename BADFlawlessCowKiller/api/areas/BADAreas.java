@@ -21,8 +21,8 @@ public class BADAreas {
 	public static final RSArea CRAB_WALK_CHECKPOINT_TWO = new RSArea(new RSTile(2663, 3624, 0), new RSTile(2669, 3625, 0));
 	public static final RSArea VARROCK_EAST_BANK_AREA = new RSArea(new RSTile(3251, 3420, 0), new RSTile(3254, 3422, 0));
 	public static final RSArea AUBURY_RUNE_SHOP_AREA = new RSArea(new RSTile(3252, 3401, 0), new RSTile(3254, 3402, 0));
-	public static final RSArea MIDDLE_PASTURE_AREA = new RSArea(new RSTile(3197, 3208, 0), new RSTile(3284, 3299, 0));
-	public static final RSArea NORTH_PASTURE_AREA = new RSArea(new RSTile(3171, 3186, 0), new RSTile(3320, 3331, 0));
+	public static final RSArea MIDDLE_PASTURE_AREA = new RSArea(new RSTile(3197, 3284, 0), new RSTile(3208, 3299, 0));
+	public static final RSArea NORTH_PASTURE_AREA = new RSArea(new RSTile(3171, 3320, 0), new RSTile(3186, 3331, 0));
 	public static final RSArea LUMBRIDGE_CASTLE_BANK_AREA = new RSArea(new RSTile(3207, 3209, 2), new RSTile(3216, 3219, 2));
 	public static final RSArea EAST_PASTURE_AREA = new RSArea(new RSTile(3248, 3262,0), new RSTile(3280, 3294, 0));
 }

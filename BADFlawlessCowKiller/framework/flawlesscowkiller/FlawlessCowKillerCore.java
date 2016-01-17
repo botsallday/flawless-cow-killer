@@ -9,6 +9,7 @@ import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSGroundItem;
 import org.tribot.api2007.types.RSNPC;
+import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
@@ -24,6 +25,7 @@ import scripts.BADFlawlessCowKiller.framework.gui.HideGUI;
 import org.tribot.api2007.GroundItems;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.NPCs;
+import org.tribot.api2007.Objects;
 
 
 public class FlawlessCowKillerCore extends Script {
@@ -40,7 +42,6 @@ public class FlawlessCowKillerCore extends Script {
 	private int bones_collected = 0;
 	private int beef_collected = 0;
 	private String food;
-    private State state;
 
 	private BADClicking CLICKING = new BADClicking();
 	private BADTransportation TRANSPORT = new BADTransportation();
@@ -55,63 +56,49 @@ public class FlawlessCowKillerCore extends Script {
     	while(!UI.getReady()) {
     		General.sleep(250);
     	}
-    	
     	execute = true;
-    	
     	setGuiVariables();
-    	
     	AB.setHoverSkill(Skills.SKILLS.HITPOINTS);
-    	General.useAntiBanCompliance(true);
     	
         while(execute) {
-        	
-            state = state();
-            if (state != null) {
-                switch (state) {
-                	case WITHDRAW_FOOD:
-                		if (Banking.openBank()){
-                			if (BANKER.depositAll() > 0) {
-                				BANKER.withdraw(food, 14);
-                			}
-                		}
-                		break;
-                    case WALK_TO_LOOTZ:
-                    	// walk to area
-                    	if (TRANSPORT.webWalking(PASTURE_GATE)) {
-                    		TRANSPORT.dpathnavWalk(PASTURE_AREA.getRandomTile());
-                		}
-                        break;
-                    case WALK_TO_BANK:
-                    	if (!TRANSPORT.dpathnavWalk(BADAreas.LUMBRIDGE_CASTLE_BANK_AREA.getRandomTile())) {
-                    		TRANSPORT.webWalking(BADAreas.LUMBRIDGE_CASTLE_BANK_AREA.getRandomTile());
-                    	}
-                    	break;
-                    case GET_THE_LOOTZ:
-                    	pickupLoot();
-                    	break;
-                    case DEPOSIT_ITEMS:
-                    	// deposit items
-                    	BANKER.depositAll();
-                        break;
-                    case WALKING:
-                    	// call antiban
-                    	AB.handleWait();
-                    	break;
-                    case KILL:
-                    	if (!CMB.searchForTarget("Cow", true)) {
-                    		CMB.searchForTarget("Calf", true);
-                    	};
-                    	break;
-                    case COMBAT:
-                    	if (use_food) {
-                    		eat();
-                    	}
-                    	AB.handleWait();
-                    	break;
-                    case SOMETHING_WENT_WRONG:
-                    	execute = false;
-                    	break;
-                }
+            switch (state()) {
+            	case WITHDRAW_FOOD:
+            		withdrawFood();
+            		break;
+                case WALK_TO_LOOTZ:
+                	// walk to area
+                	walkToLootz();
+                    break;
+                case WALK_TO_BANK:
+                	if (!TRANSPORT.dpathnavWalk(BADAreas.LUMBRIDGE_CASTLE_BANK_AREA.getRandomTile())) {
+                		TRANSPORT.webWalking(BADAreas.LUMBRIDGE_CASTLE_BANK_AREA.getRandomTile());
+                	}
+                	break;
+                case GET_THE_LOOTZ:
+                	pickupLoot();
+                	break;
+                case DEPOSIT_ITEMS:
+                	// deposit items
+                	BANKER.depositAll();
+                    break;
+                case WALKING:
+                	// call antiban
+                	AB.handleWait();
+                	break;
+                case KILL:
+                	if (!CMB.searchForTarget("Cow", true)) {
+                		CMB.searchForTarget("Calf", true);
+                	};
+                	break;
+                case COMBAT:
+                	if (use_food) {
+                		eat();
+                	}
+                	AB.handleWait();
+                	break;
+                case SOMETHING_WENT_WRONG:
+                	execute = false;
+                	break;
             }
             // control cpu usage
             General.sleep(100,  250);
@@ -236,6 +223,18 @@ public class FlawlessCowKillerCore extends Script {
 	   return bank_hides || bank_beef || bank_bones || (use_food && outOfFood());
    }
    
+   private void walkToLootz() {
+   	if (TRANSPORT.webWalking(PASTURE_GATE)) {
+		RSObject[] gate = Objects.find(5, Filters.Objects.actionsContains("Open"));
+		if (gate.length > 0) {
+			if (gate[0].click("Open")) {
+				Timing.waitCondition(BADConditions.noClosedGatesNear(), 3000);
+			}
+		}
+		TRANSPORT.nav().traverse(PASTURE_AREA.getRandomTile());
+	}
+   }
+   
    private void setGuiVariables() {
 	   bank_hides = UI.getBankCowhides();
 	   bank_beef = UI.getBankBeef();
@@ -303,6 +302,22 @@ public class FlawlessCowKillerCore extends Script {
 	   }
 	   
 	   return PASTURE_AREA;
+   }
+   
+   private void withdrawFood() {
+		if (Banking.openBank()){
+			println(Inventory.getAll().length);
+			General.sleep(4000);
+			if (BANKER.depositAll() > 0 || Inventory.getAll().length == 0) {
+				if (BANKER.withdraw(food, 14)) {
+					
+				} else {
+					if (Banking.find(food).length < 1){
+						use_food = false;
+					}
+				};
+			}
+		}
    }
    
    public long getHides() {
