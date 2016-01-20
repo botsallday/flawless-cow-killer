@@ -90,7 +90,7 @@ public class BADAntiBan {
 	public RSNPC handleUseClosest(RSNPC a, RSNPC b) {
     	
 		if (abc.BOOL_TRACKER.USE_CLOSEST.next()) {
-			if (b.getPosition().distanceTo(a.getPosition()) < 4) {
+			if (b.getPosition().distanceTo(a.getPosition()) < 3) {
 				abc.BOOL_TRACKER.USE_CLOSEST.reset();
 				return b;
 			}
@@ -113,6 +113,14 @@ public class BADAntiBan {
     	// handle waiting between fighting npcs
     	General.sleep(abc.DELAY_TRACKER.SWITCH_OBJECT_COMBAT.next());
     	abc.DELAY_TRACKER.SWITCH_OBJECT_COMBAT.reset();
+    	return true;
+    }
+    
+    @SuppressWarnings("deprecation")
+	public boolean handleSwitchObjectDelay() {
+    	// handle waiting between fighting npcs
+    	General.sleep(abc.DELAY_TRACKER.SWITCH_OBJECT.next());
+    	abc.DELAY_TRACKER.SWITCH_OBJECT.reset();
     	return true;
     }
     

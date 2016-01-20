@@ -96,6 +96,13 @@ public class FlawlessCowKillerCore {
 	                	if (use_food) {
 	                		eat();
 	                	}
+	                	// handle hover next
+	                	if (AB.abc.BOOL_TRACKER.HOVER_NEXT.next()) {
+	                		// find the next target and hover it
+	                		if (CMB.handleHoverNext("Cow")) {
+	                			AB.abc.BOOL_TRACKER.HOVER_NEXT.reset();
+	                		}
+	                	}
 	                	AB.handleWait();
 	                	break;
 	                case SOMETHING_WENT_WRONG:
@@ -196,27 +203,29 @@ public class FlawlessCowKillerCore {
     }
    
    private void pickupLoot() {
-   	int count = Inventory.getAll().length;
-
-       // pickup loot
-   	if (bank_hides) {
-	   		if (CLICKING.getGroundItemByName("cowhide")) {
-	   			Timing.waitCondition(BADConditions.gainedItem(count), General.random(2500, 4500));
-	   			hides_collected++;
-	   		};
-		}
-   	if (bank_bones) {
+   		int count = Inventory.getAll().length;
+        // pickup loot
+	   	if (bank_hides) {
+		   		if (CLICKING.getGroundItemByName("cowhide")) {
+		   			Timing.waitCondition(BADConditions.gainedItem(count), General.random(2500, 4500));
+		   			hides_collected++;
+		   		};
+			}
+	   	AB.handleItemInteractionDelay();
+	   	if (bank_bones) {
 	   		if (CLICKING.getGroundItemByName("bones")) {
 	   			Timing.waitCondition(BADConditions.gainedItem(count), General.random(2500, 4500));
 	   			bones_collected++;
 	   		};
 		}
+	   	AB.handleItemInteractionDelay();
 		if (bank_beef) {
 	   		if (CLICKING.getGroundItemByName("raw beef")) {
 	   			Timing.waitCondition(BADConditions.gainedItem(count), General.random(2500, 4500));
 	   			beef_collected++;
 	   		};
 		}
+		AB.handleItemInteractionDelay();
    }
    
    private boolean outOfFood() {
