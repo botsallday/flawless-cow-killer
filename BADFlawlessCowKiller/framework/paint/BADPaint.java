@@ -12,6 +12,7 @@ public class BADPaint {
     private static final long startTime = System.currentTimeMillis();
     
 	public void paint(Graphics g, long hides_collected, long bones_collected, long beef_collected) {
+		
        // set variables for display
        long run_time = System.currentTimeMillis() - startTime;
        

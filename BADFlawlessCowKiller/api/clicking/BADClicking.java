@@ -122,28 +122,30 @@ public class BADClicking {
 	public boolean getGroundItemByName(String item) {
 		// get ground items
 		RSGroundItem[] groundItems = GroundItems.findNearest(item);
-		// get definition
-		RSItemDefinition definition = groundItems[0].getDefinition();
+		if (groundItems.length > 0) {
+			// get definition
+			RSItemDefinition definition = groundItems[0].getDefinition();
 		
-	    if (definition != null) {
-	        String name = definition.getName();
-	        if (name != null) {
-	        	// take item from stack
-	            if (groundItems[0].click("Take " + name)) {
-	            	// count inventory items
-	            	final int count = Inventory.getAll().length;
-	            	
-	            	// wait condition
-	            	Timing.waitCondition(new Condition() {
-	                    @Override
-	                    public boolean active() {
-	                        return Inventory.getAll().length > count;
-	                    }
-	                }, General.random(3000, 6000));
-	            	
-	            	return true;
-	            }
-	        }
+		    if (definition != null) {
+		        String name = definition.getName();
+		        if (name != null) {
+		        	// take item from stack
+		            if (groundItems[0].click("Take " + name)) {
+		            	// count inventory items
+		            	final int count = Inventory.getAll().length;
+		            	
+		            	// wait condition
+		            	Timing.waitCondition(new Condition() {
+		                    @Override
+		                    public boolean active() {
+		                        return Inventory.getAll().length > count;
+		                    }
+		                }, General.random(3000, 6000));
+		            	
+		            	return true;
+		            }
+		        }
+		    }
 	    }
 	    
 	    return false;

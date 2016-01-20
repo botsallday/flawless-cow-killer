@@ -28,7 +28,7 @@ import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Objects;
 
 
-public class FlawlessCowKillerCore extends Script {
+public class FlawlessCowKillerCore {
 	
 	private HideGUI UI = new HideGUI();
 	private BADAntiBan AB = new BADAntiBan();
@@ -266,7 +266,7 @@ public class FlawlessCowKillerCore extends Script {
 	public boolean eat() {
 		if (healthPercent() < AB.abc.INT_TRACKER.NEXT_EAT_AT.next()) {
 			if (eatFood()) {
-				println("Ate food");
+				General.println("Ate food");
 				AB.abc.INT_TRACKER.NEXT_EAT_AT.reset();
 				return true;
 			};
